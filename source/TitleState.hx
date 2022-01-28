@@ -227,7 +227,7 @@ class TitleState extends MusicBeatState
 			gfDance.animation.addByIndices('danceRight', 'psykaDance', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
 		}
 		gfDance.antialiasing = ClientPrefs.globalAntialiasing;
-		add(backgroundTitle)
+		add(backgroundTitle);
 		//add(gfDance);
 		gfDance.shader = swagShader.shader;
 		add(logoBl);
