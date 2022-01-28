@@ -39,6 +39,7 @@ class TitleState extends MusicBeatState
 	static var initialized:Bool = false;
 
 	var blackScreen:FlxSprite;
+	var backgroundTitle:FlxSprite
 	var credGroup:FlxGroup;
 	var credTextShit:Alphabet;
 	var textGroup:FlxGroup;
@@ -202,9 +203,15 @@ class TitleState extends MusicBeatState
 		logoBl.animation.addByPrefix('bump', 'logo bumpin', 24);
 		logoBl.animation.play('bump');
 		logoBl.updateHitbox();
-		// logoBl.screenCenter();
+		logoBl.screenCenter();
 		// logoBl.color = FlxColor.BLACK;
-
+		backgroundTitle = new FlxSprite().loadGraphic(Paths.image('TitleBG'));
+  backgroundTitle.screenCenter();
+  backgroundTitle.antialiasing = ClientPrefs.globalAntialiasing;
+		
+        swagShader = new ColorSwap();
+   gfDance = new FlxSprite(titleJSON.gfx, titleJSON.gfy);
+   
 		swagShader = new ColorSwap();
 		if(!FlxG.save.data.psykaEasterEgg || !easterEggEnabled) {
 			gfDance = new FlxSprite(FlxG.width * 0.4, FlxG.height * 0.07);
@@ -220,7 +227,8 @@ class TitleState extends MusicBeatState
 			gfDance.animation.addByIndices('danceRight', 'psykaDance', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
 		}
 		gfDance.antialiasing = ClientPrefs.globalAntialiasing;
-		add(gfDance);
+		add(backgroundTitle)
+		//add(gfDance);
 		gfDance.shader = swagShader.shader;
 		add(logoBl);
 		//logoBl.shader = swagShader.shader;
