@@ -205,12 +205,11 @@ class TitleState extends MusicBeatState
 		logoBl.updateHitbox();
 		logoBl.screenCenter();
 		// logoBl.color = FlxColor.BLACK;
+		
+		
 		backgroundTitle = new FlxSprite().loadGraphic(Paths.image('TitleBG'));
   backgroundTitle.screenCenter();
   backgroundTitle.antialiasing = ClientPrefs.globalAntialiasing;
-		
-        swagShader = new ColorSwap();
-   gfDance = new FlxSprite(titleJSON.gfx, titleJSON.gfy);
    
 		swagShader = new ColorSwap();
 		if(!FlxG.save.data.psykaEasterEgg || !easterEggEnabled) {
