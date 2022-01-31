@@ -1,26 +1,59 @@
-local allowCountdown = false
-function onStartCountdown()
-	-- Block the first countdown and start a timer of 0.8 seconds to play the dialogue
-	if not allowCountdown and isStoryMode and not seenCutscene then
-		setProperty('inCutscene', true);
-		runTimer('startDialogue', 0.8);
-		allowCountdown = true;
-		return Function_Stop;
-	end
-	return Function_Continue;
-end
-
-function onTimerCompleted(tag, loops, loopsLeft)
-	if tag == 'startDialogue' then -- Timer completed, play dialogue
-		startDialogue('dialogue', 'breakfast');
+function onUpdate(elapsed)
+function onMoveCamera(focus)
+	if focus == 'boyfriend' then
+		-- called when the camera focus on boyfriend
+	elseif focus == 'dad' then
+		setProperty('camFollowPos.y',getProperty('camFollowPos.y') + (math.sin(currentBeat) * 0.6))
 	end
 end
-
--- Dialogue (When a dialogue is finished, it calls startCountdown again)
-function onNextDialogue(count)
-	-- triggered when the next dialogue line starts, 'line' starts with 1
+songPos = getSongPosition()
+local currentBeat = (songPos/5000)*(curBpm/60)
+setCharacterY('dad',getCharacterY('dad') + (math.sin(currentBeat) * 0.6))
+noteTweenX(defaultPlayerStrumX0, 4, ((screenWidth / 2) - (157 / 2)) + (math.sin((currentBeat) + 0) * 300), 0.001)
+noteTweenX(defaultPlayerStrumX1, 5, ((screenWidth / 2) - (157 / 2)) + (math.sin((currentBeat) + 1) * 300), 0.001)
+noteTweenX(defaultPlayerStrumX2, 6, ((screenWidth / 2) - (157 / 2)) + (math.sin((currentBeat) + 2) * 300), 0.001)
+noteTweenX(defaultPlayerStrumX3, 7, ((screenWidth / 2) - (157 / 2)) + (math.sin((currentBeat) + 3) * 300), 0.001)
+noteTweenY('defaultPlayerStrumY0', 4, ((screenHeight / 2) - (157 / 2)) + (math.cos((currentBeat) + 0) * 300), 0.001)
+noteTweenY('defaultPlayerStrumY1', 5, ((screenHeight / 2) - (157 / 2)) + (math.cos((currentBeat) + 1) * 300), 0.001)
+noteTweenY('defaultPlayerStrumY2', 6, ((screenHeight / 2) - (157 / 2)) + (math.cos((currentBeat) + 2) * 300), 0.001)
+noteTweenY('defaultPlayerStrumY3', 7, ((screenHeight / 2) - (157 / 2)) + (math.cos((currentBeat) + 3) * 300), 0.001)
+noteTweenX('fake1', 0, ((screenWidth / 2) - (157 / 2)) + (math.sin((currentBeat) + (4) * 2) * 300), 0.001)
+noteTweenX('fake2', 1, ((screenWidth / 2) - (157 / 2)) + (math.sin((currentBeat) + (5) * 2) * 300), 0.001)
+noteTweenX('fake3', 2, ((screenWidth / 2) - (157 / 2)) + (math.sin((currentBeat) + (6) * 2) * 300), 0.001)
+noteTweenX('fake4', 3, ((screenWidth / 2) - (157 / 2)) + (math.sin((currentBeat) + (7) * 2) * 300), 0.001)
+noteTweenY('defaultFPlayerStrumY0', 0, ((screenHeight / 2) - (157 / 2)) + (math.cos((currentBeat) + (4) * 2) * 300), 0.001)
+noteTweenY('defaultFPlayerStrumY1', 1, ((screenHeight / 2) - (157 / 2)) + (math.cos((currentBeat) + (5) * 2) * 300), 0.001)
+noteTweenY('defaultFPlayerStrumY2', 2, ((screenHeight / 2) - (157 / 2)) + (math.cos((currentBeat) + (6) * 2) * 300), 0.001)
+noteTweenY('defaultFPlayerStrumY3', 3, ((screenHeight / 2) - (157 / 2)) + (math.cos((currentBeat) + (7) * 2) * 300), 0.001)
+setPropertyFromClass('ClientPrefs', 'ghostTapping', false)
+if ghostTapping or middleScroll then
+endSong()
 end
-
-function onSkipDialogue(count)
-	-- triggered when you press Enter and skip a dialogue line that was still being typed, dialogue line starts with 1
+setPropertyFromClass('ClientPrefs', 'downScroll', true)
+setPropertyFromClass('ClientPrefs', 'middleScroll', false)
+function opponentNoteHit(id, direction, noteType, isSustainNote)
+cameraShake(game, 0.015, 0.2)
+cameraSetTarget('isangel')
+characterPlayAnim('gf', 'scared', true)
+doTweenZoom('camerazoom','camGame',1.05,0.15,'quadInOut')
+setProperty('health', getProperty('health') - 1 * ((getProperty('health')/22))/6)
+end
+function goodNoteHit(id, direction, noteType, isSustainNote)
+cameraSetTarget('boyfriend')
+end
+function noteMiss(direction)
+setProperty('health', getProperty('health') + 0.025)
+end
+function noteMissPress(direction)
+setProperty('health', getProperty('health') + 0.025)
+end
+setPropertyFromClass('ClientPrefs', 'downScroll', true)
+setPropertyFromClass('ClientPrefs', 'middleScroll', true)
+function opponentNoteHit(id, direction, noteType, isSustainNote)
+cameraShake(game, 0.015, 0.2)
+cameraSetTarget('isangel')
+characterPlayAnim('gf', 'scared', true)
+doTweenZoom('camerazoom','camGame',1.05,0.15,'quadInOut')
+setProperty('health', getProperty('health') - 9 * ((getProperty('health')/22))/6)
+end
 end
